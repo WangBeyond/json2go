@@ -1,8 +1,4 @@
-  ____      ____     _  
- / ___| ___|___ \   | |___  ___  _ __  
-| |  _ / _ \ __) |  | / __|/ _ \| '_ \  
-| |_| | (_) / __/ |_| \__ \ (_) | | | |  
- \____|\___/_____\___/|___/\___/|_| |_|  
+#Go2Json
   
 Parse JSON file and create Go file declaring corresponding structs 
 
