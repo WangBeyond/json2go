@@ -2,27 +2,40 @@
   "name": "Brand",
   "married": true,
   "company": {
-    "Name":"Lexus",
+    "Name": "Lexus",
     "location": "Japan",
     "num_employees": 40000,
     "departments": [
       {
         "name": "sales",
-        "num_employees":3000
+        "num_employees": 3000
       },
       {
         "name": "tech"
       }
     ]
   },
-  "Friends": [{
-    "name": "Mike",
-    "age": 24
-  },
+  "Friends": [
     {
-    "name": "Tom"
-    },{
+      "name": "Mike",
+      "age": 24,
+      "company": {
+        "name": "Toyota",
+        "profitable": true
+      }
+    },
+    {
+      "name": "Tom",
+      "hobby": "cycling",
+      "company": {
+        "name": "Dyson",
+        "Ceo": "Somebody"
+      }
+    },
+    {
       "name": "Johnson",
-      "age": 23
-    }]
+      "age": 23,
+      "hobby": "drawing"
+    }
+  ]
 }

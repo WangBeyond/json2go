@@ -41,29 +41,25 @@ func jsonToGoStructs(jsonBytes []byte, rootStructName string, packageName string
 
 	code := &Code{
 		Header: fmt.Sprintf(headerTemplate, packageName),
-		Body:   []string{},
+		Body:   StructDefMap{},
 	}
 
 	// traverse all classes/structs and fields in BFS
 	classes := []Class{{Name: rootStructName, Data: parsed}}
 	for i := 0; i < len(classes); i++ {
-		def := ""
 		class := classes[i]
-		def += fmt.Sprintf("type %s struct {\n", underscoreToCamel(class.Name))
-		for field, val := range class.Data {
+		def := StructDef{}
+		if v, ok := code.Body[underscoreToCamel(class.Name)]; ok {
+			def = v
+		} else {
+			code.Body[underscoreToCamel(class.Name)] = def
+		}
 
+		for field, val := range class.Data {
 			// if the val is a array or nested array, find the parsed type of its elements
-			arrayDimensions := 0
-			for {
-				slice, ok := val.([]interface{})
-				if !ok {
-					break
-				}
-				arrayDimensions++
-				if len(slice) == 0 {
-					break
-				}
-				val = slice[0]
+			subClasses, arrayDimensions := getNestedSlice(field, val)
+			for _, c := range subClasses {
+				classes = append(classes, c)
 			}
 
 			// generate array annotation like [][] based on dimensions of array
@@ -88,29 +84,67 @@ func jsonToGoStructs(jsonBytes []byte, rootStructName string, packageName string
 				fieldType = "int64"
 			case float64: // actually all json numbers will be parsed as float64
 				fieldType = "float64"
+			case bool: // actually all json numbers will be parsed as float64
+				fieldType = "bool"
 			default:
 				fieldType = "string"
 			}
 
 			fieldType = arrayAnnotation + fieldType
-			def += fmt.Sprintf("\t%s %s `json:\"%s\"`\n", fieldName, fieldType, jsonTag)
+			def[fieldName] = Field{Name: fieldName, Type: fieldType, JsonTag: jsonTag}
 		}
-		def += "}"
-		code.Body = append(code.Body, def)
+
 	}
 	return code
 }
 
-// StructDefs is a slice of declaration of structure type
-type StructDefs []string
+func getNestedSlice(name string, input interface{}) ([]Class, int) {
+	slice, ok := input.([]interface{})
+	if ok {
+		res := []Class{}
+		resLvl := 0
+		for _, ele := range slice {
+			children, lvl := getNestedSlice(name, ele)
+			resLvl = lvl + 1
+			res = append(res, children...)
+		}
+		return res, resLvl
+	}
+	dict, ok := input.(map[string]interface{})
+	if ok {
+		return []Class{{Name: name, Data: dict}}, 0
+	}
+	return nil, 0
+}
+
+// StructDefMap is a slice of declaration of structure type
+type StructDefMap map[string]StructDef
+
+type StructDef map[string]Field
+
+type Field struct {
+	Name    string
+	Type    string
+	JsonTag string
+}
 
 type Code struct {
 	Header string
-	Body   StructDefs
+	Body   StructDefMap
 }
 
-func (s StructDefs) String() string {
-	return strings.Join(s, "\n\n")
+func (s StructDefMap) String() string {
+	res := []string{}
+	for class, fieldMap := range s {
+		structDef := fmt.Sprintf("type %s struct {\n", underscoreToCamel(class))
+		for _, def := range fieldMap {
+			structDef += fmt.Sprintf("\t%s %s `json:\"%s\"`\n", def.Name, def.Type, def.JsonTag)
+		}
+		structDef += "}"
+		res = append(res, structDef)
+	}
+
+	return strings.Join(res, "\n\n")
 }
 
 func (c *Code) String() string {

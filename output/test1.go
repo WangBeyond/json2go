@@ -1,25 +1,29 @@
 package person
 
 type Person struct {
-	Name string `json:"name"`
-	Married string `json:"married"`
 	Company Company `json:"company"`
-	Friends []Friend `json:"Friends"`
+	Friends []string `json:"Friends"`
+	Name string `json:"name"`
+	Married bool `json:"married"`
 }
 
 type Company struct {
-	Name string `json:"Name"`
+	Profitable bool `json:"profitable"`
+	Ceo string `json:"Ceo"`
+	Name string `json:"name"`
 	Location string `json:"location"`
 	NumEmployees float64 `json:"num_employees"`
-	Departments []Department `json:"departments"`
+	Departments []string `json:"departments"`
 }
 
-type Friend struct {
-	Name string `json:"name"`
+type Friends struct {
 	Age float64 `json:"age"`
+	Company Company `json:"company"`
+	Hobby string `json:"hobby"`
+	Name string `json:"name"`
 }
 
-type Department struct {
+type Departments struct {
 	Name string `json:"name"`
 	NumEmployees float64 `json:"num_employees"`
 }
