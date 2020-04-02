@@ -1,4 +1,4 @@
-#Go2Json
+# Go2Json
   
 Parse JSON file and create Go file declaring corresponding structs 
 
