@@ -1,0 +1,28 @@
+{
+  "name": "Brand",
+  "married": true,
+  "company": {
+    "Name":"Lexus",
+    "location": "Japan",
+    "num_employees": 40000,
+    "departments": [
+      {
+        "name": "sales",
+        "num_employees":3000
+      },
+      {
+        "name": "tech"
+      }
+    ]
+  },
+  "Friends": [{
+    "name": "Mike",
+    "age": 24
+  },
+    {
+    "name": "Tom"
+    },{
+      "name": "Johnson",
+      "age": 23
+    }]
+}
