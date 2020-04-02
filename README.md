@@ -18,29 +18,42 @@ Input JSON:
   "name": "Brand",
   "married": true,
   "company": {
-    "Name":"Lexus",
+    "Name": "Lexus",
     "location": "Japan",
     "num_employees": 40000,
     "departments": [
       {
         "name": "sales",
-        "num_employees":3000
+        "num_employees": 3000
       },
       {
         "name": "tech"
       }
     ]
   },
-  "Friends": [{
-    "name": "Mike",
-    "age": 24
-  },
+  "Friends": [
     {
-    "name": "Tom"
-    },{
+      "name": "Mike",
+      "age": 24,
+      "company": {
+        "name": "Toyota",
+        "profitable": true
+      }
+    },
+    {
+      "name": "Tom",
+      "hobby": "cycling",
+      "company": {
+        "name": "Dyson",
+        "Ceo": "Somebody"
+      }
+    },
+    {
       "name": "Johnson",
-      "age": 23
-    }]
+      "age": 23,
+      "hobby": "drawing"
+    }
+  ]
 }
 ```
 <br/>
@@ -50,25 +63,29 @@ Output Go file:
 package person
 
 type Person struct {
-	Name string `json:"name"`
-	Married string `json:"married"`
 	Company Company `json:"company"`
-	Friends []Friend `json:"Friends"`
+	Friends []string `json:"Friends"`
+	Name string `json:"name"`
+	Married bool `json:"married"`
 }
 
 type Company struct {
-	Name string `json:"Name"`
+	Profitable bool `json:"profitable"`
+	Ceo string `json:"Ceo"`
+	Name string `json:"name"`
 	Location string `json:"location"`
 	NumEmployees float64 `json:"num_employees"`
-	Departments []Department `json:"departments"`
+	Departments []string `json:"departments"`
 }
 
-type Friend struct {
-	Name string `json:"name"`
+type Friends struct {
 	Age float64 `json:"age"`
+	Company Company `json:"company"`
+	Hobby string `json:"hobby"`
+	Name string `json:"name"`
 }
 
-type Department struct {
+type Departments struct {
 	Name string `json:"name"`
 	NumEmployees float64 `json:"num_employees"`
 }
