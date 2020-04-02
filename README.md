@@ -1,5 +1,10 @@
-# json2go
-parse JSON file and create Go file declaring corresponding structs 
+  ____      ____     _  
+ / ___| ___|___ \   | |___  ___  _ __  
+| |  _ / _ \ __) |  | / __|/ _ \| '_ \  
+| |_| | (_) / __/ |_| \__ \ (_) | | | |  
+ \____|\___/_____\___/|___/\___/|_| |_|  
+  
+Parse JSON file and create Go file declaring corresponding structs 
 
 ## Usage
 ```
